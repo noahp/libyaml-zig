@@ -19,5 +19,19 @@ DOCKER_BUILDKIT=1 docker build -t "$DOCKER_IMAGE_NAME" --build-arg "UID=$(id -u)
 
 docker run -i -v "$(pwd)":/mnt/workspace -t "$DOCKER_IMAGE_NAME" bash -c "
     export CC='zig cc -target x86_64-linux-musl -static' &&
-    cd /mnt/workspace/libyaml &&
-    ./bootstrap && ./configure && make -j6"
+    cd /mnt/workspace &&
+    (
+        cd libyaml &&
+        ./bootstrap && ./configure && make -j6
+    ) &&
+    zig cc -target x86_64-linux-musl -static -O2 test.c ./libyaml/src/.libs/libyaml.a && ./test foo.yaml"
+
+# docker run -i -v "$(pwd)":/mnt/workspace -t "$DOCKER_IMAGE_NAME" bash -c "
+#     export CC='zig cc -target x86_64-windows-gnu -static' &&
+#     cd /mnt/workspace &&
+#     (
+#         cd libyaml &&
+#         ./bootstrap && ./configure --host x86_64-linux-gnu --target x86_64-windows-gnu && make -j6
+#     ) &&
+#     zig cc -target x86_64-windows-gnu -static -static test.c ./libyaml/src/.libs/libyaml.a && wine64 ./test foo.yaml"
+

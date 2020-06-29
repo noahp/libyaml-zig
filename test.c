@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-#include "../libyaml/include/yaml.h"
+#include "libyaml/include/yaml.h"
 
 static void parse_yaml(char *filename) {
     FILE *fh = fopen(filename, "r");
