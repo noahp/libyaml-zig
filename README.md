@@ -1,3 +1,5 @@
-# test-libyaml-static
+# libyaml-zig
 
-Playing around with using zig to cross-compile static libs/executables.
+Playing around with using zig to build libyaml.
+
+TODO look into adding zig native bindings for manipulating yaml documents.

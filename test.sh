@@ -26,6 +26,7 @@ docker run -i -v "$(pwd)":/mnt/workspace -t "$DOCKER_IMAGE_NAME" bash -c "
     ) &&
     zig cc -target x86_64-linux-musl -static -O2 test.c ./libyaml/src/.libs/libyaml.a && ./test foo.yaml"
 
+# Windows cross not working :(
 # docker run -i -v "$(pwd)":/mnt/workspace -t "$DOCKER_IMAGE_NAME" bash -c "
 #     export CC='zig cc -target x86_64-windows-gnu -static' &&
 #     cd /mnt/workspace &&
