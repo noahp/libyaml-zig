@@ -1,0 +1,3 @@
+[submodule "libyaml"]
+	path = libyaml
+	url = ../../yaml/libyaml.git
