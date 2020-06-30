@@ -17,14 +17,16 @@ DOCKER_IMAGE_NAME=${DOCKER_IMAGE_NAME:-$(basename -s .git "$(git remote --verbos
 # build the docker image
 DOCKER_BUILDKIT=1 docker build -t "$DOCKER_IMAGE_NAME" --build-arg "UID=$(id -u)" -f Dockerfile .
 
-docker run -i -v "$(pwd)":/mnt/workspace -t "$DOCKER_IMAGE_NAME" bash -c "
-    export CC='zig cc -target x86_64-linux-musl -static' &&
-    cd /mnt/workspace &&
-    (
-        cd libyaml &&
-        ./bootstrap && ./configure && make -j6
-    ) &&
-    zig cc -target x86_64-linux-musl -static -O2 test.c ./libyaml/src/.libs/libyaml.a && ./test foo.yaml"
+# build libyaml with zig cc, statically linked with musl
+# then build the small test application and run it with foo.yaml input
+# docker run -i -v "$(pwd)":/mnt/workspace -t "$DOCKER_IMAGE_NAME" bash -c "
+#     export CC='zig cc -target x86_64-linux-musl -static' &&
+#     cd /mnt/workspace &&
+#     (
+#         cd libyaml &&
+#         ./bootstrap && ./configure && make -j6
+#     ) &&
+#     zig cc -target x86_64-linux-musl -static -O2 test.c ./libyaml/src/.libs/libyaml.a && ./test foo.yaml"
 
 # Windows cross not working :(
 # docker run -i -v "$(pwd)":/mnt/workspace -t "$DOCKER_IMAGE_NAME" bash -c "
@@ -32,7 +34,7 @@ docker run -i -v "$(pwd)":/mnt/workspace -t "$DOCKER_IMAGE_NAME" bash -c "
 #     cd /mnt/workspace &&
 #     (
 #         cd libyaml &&
-#         ./bootstrap && ./configure --host x86_64-linux-gnu --target x86_64-windows-gnu && make -j6
+#         ./bootstrap && ./configure --build x86_64-linux-gnu --host x86_64-windows-gnu && make -j6
 #     ) &&
 #     zig cc -target x86_64-windows-gnu -static -static test.c ./libyaml/src/.libs/libyaml.a && wine64 ./test foo.yaml"
 
